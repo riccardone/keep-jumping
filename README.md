@@ -1,2 +1,2 @@
 # keep-jumping
-A lost guy looking the one rule
+A lost guy following the one rule
