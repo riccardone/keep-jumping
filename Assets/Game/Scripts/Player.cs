@@ -55,17 +55,17 @@ namespace Game.Scripts
             }
         }
 
-        private void LateUpdate()
-        {
-            if (IsPlayerMoving() && _movementMode == MovementMode.Strafe)
-                transform.localEulerAngles = new Vector3(transform.localEulerAngles.x,
-                    _cameraRig.transform.localEulerAngles.y, transform.localEulerAngles.z);
-        }
-
-        private bool IsPlayerMoving()
-        {
-            return Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0;
-        }
+        // private void LateUpdate()
+        // {
+        //     if (IsPlayerMoving() && _movementMode == MovementMode.Strafe)
+        //         transform.localEulerAngles = new Vector3(transform.localEulerAngles.x,
+        //             _cameraRig.transform.localEulerAngles.y, transform.localEulerAngles.z);
+        // }
+        //
+        // private bool IsPlayerMoving()
+        // {
+        //     return Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0;
+        // }
 
         private void MovementStafe()
         {
