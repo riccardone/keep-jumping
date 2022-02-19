@@ -109,6 +109,7 @@ GameObject:
   - component: {fileID: 2408849572369729435}
   - component: {fileID: 3991779964696118704}
   - component: {fileID: 1676547286635168083}
+  - component: {fileID: 7635352244693148466}
   - component: {fileID: 3783318001265263272}
   m_Layer: 0
   m_Name: Player
@@ -286,6 +287,20 @@ MonoBehaviour:
   jumpHeight: 2
   turnSmoothTime: 0.2
   speedSmoothTime: 0.1
+--- !u!114 &7635352244693148466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3399289243507714993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d89c25e24182e344a259139e60cbd94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxHealth: 10
+  CriticalHealthRatio: 0.3
 --- !u!54 &3783318001265263272
 Rigidbody:
   m_ObjectHideFlags: 0

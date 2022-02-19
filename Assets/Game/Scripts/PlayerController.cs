@@ -1,16 +1,18 @@
 using System;
+using Game.Scripts.Managers;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Game.Scripts
 {
-    public class Player : MonoBehaviour
+    public enum MovementMode
     {
-        enum MovementMode
-        {
-            Platformer,
-            Strafe
-        }
-
+        Platformer,
+        Strafe
+    }
+    
+    public class PlayerController : MonoBehaviour
+    {
         [SerializeField] private MovementMode _movementMode = MovementMode.Strafe;
         [SerializeField] private float _walkSpeed = 3f;
         [SerializeField] private float _runningSpeed = 6f;
@@ -19,27 +21,44 @@ namespace Game.Scripts
         [SerializeField] private float _jumpSpeed = 3.5f;
         [SerializeField] private float _doubleJumpMultiplier = 0.5f;
         [SerializeField] private GameObject _cameraRig;
-
+        
+        [FormerlySerializedAs("FallDamageAtMaxSpeed")]
+        [Tooltip("Damage received when falling at the maximum speed")] 
+        [SerializeField]
+        private float _fallDamage = 10.0f;
+        
+        [Tooltip("Audio source for footsteps, jump, etc...")]
+        public AudioSource AudioSource;
+        
+        [Tooltip("Sound played when falling to death")]
+        public AudioClip FallScreamSfx;
+        
         public float jumpHeight = 1;
-
+        public float turnSmoothTime = 0.2f;
+        public bool IsDead { get; private set; }
+        
         private CharacterController _controller;
-
         private float _directionY;
         private float _currentSpeed;
-
         private bool _canDoubleJump = false;
-
-        public float turnSmoothTime = 0.2f;
-        float turnSmoothVelocity;
-
+        private float _turnSmoothVelocity;
         public float speedSmoothTime = 0.1f;
-        float speedSmoothVelocity;
-
-        private float velocityY;
+        private float _speedSmoothVelocity;
+        private float _velocityY;
+        private Health _health;
 
         void Start()
         {
             _controller = GetComponent<CharacterController>();
+            _health = GetComponent<Health>();
+            
+            _health.OnDie += OnDie;
+        }
+
+        private void OnDie()
+        {
+            IsDead = true;
+            EventManager.Broadcast(Events.PlayerDeathEvent);
         }
 
         void Update()
@@ -98,39 +117,49 @@ namespace Game.Scripts
 
             bool running = Input.GetKey(KeyCode.LeftShift);
             float targetSpeed = (running) ? _runningSpeed : _walkSpeed;
-            _currentSpeed = Mathf.SmoothDamp(_currentSpeed, targetSpeed, ref speedSmoothVelocity, speedSmoothTime);
+            _currentSpeed = Mathf.SmoothDamp(_currentSpeed, targetSpeed, ref _speedSmoothVelocity, speedSmoothTime);
 
             moveDirection.y = _directionY;
 
             _controller.Move(_currentSpeed * Time.deltaTime * moveDirection);
         }
 
+        private bool _screaming;
+
         private void MovementPlatformer()
         {
-            Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-            Vector2 inputDir = input.normalized;
-            bool running = Input.GetKey(KeyCode.LeftShift);
+            var input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+            var inputDir = input.normalized;
+            var running = Input.GetKey(KeyCode.LeftShift);
 
             if (inputDir != Vector2.zero)
             {
                 float targetRotation = Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg +
                                        _cameraRig.transform.eulerAngles.y;
                 transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation,
-                    ref turnSmoothVelocity, turnSmoothTime);
+                    ref _turnSmoothVelocity, turnSmoothTime);
             }
 
-            float targetSpeed = ((running) ? _runningSpeed : _walkSpeed) * inputDir.magnitude;
-            _currentSpeed = Mathf.SmoothDamp(_currentSpeed, targetSpeed, ref speedSmoothVelocity, speedSmoothTime);
+            // is the player falling?
+            if (Math.Abs(_velocityY - (-10.0f)) < 1)
+                AudioSource.PlayOneShot(FallScreamSfx);
 
-            velocityY += Time.deltaTime * _gravityPlatformer;
-            Vector3 velocity = transform.forward * _currentSpeed + Vector3.up * velocityY;
+            // end of the game
+            if (Math.Abs(_velocityY - (-30.0f)) < 1)
+                _health.TakeDamage(_fallDamage, gameObject);
+
+            float targetSpeed = ((running) ? _runningSpeed : _walkSpeed) * inputDir.magnitude;
+            _currentSpeed = Mathf.SmoothDamp(_currentSpeed, targetSpeed, ref _speedSmoothVelocity, speedSmoothTime);
+
+            _velocityY += Time.deltaTime * _gravityPlatformer;
+            Vector3 velocity = transform.forward * _currentSpeed + Vector3.up * _velocityY;
 
             _controller.Move(velocity * Time.deltaTime);
             _currentSpeed = new Vector2(_controller.velocity.x, _controller.velocity.z).magnitude;
 
             if (_controller.isGrounded)
             {
-                velocityY = 0;
+                _velocityY = 0;
             }
 
             if (Input.GetKeyDown(KeyCode.Space))
@@ -138,7 +167,7 @@ namespace Game.Scripts
                 if (_controller.isGrounded)
                 {
                     float jumpVelocity = Mathf.Sqrt(-2 * _gravityPlatformer * jumpHeight);
-                    velocityY = jumpVelocity;
+                    _velocityY = jumpVelocity;
                 }
             }
         }
