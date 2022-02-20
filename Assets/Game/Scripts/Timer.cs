@@ -4,11 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using Game.Scripts;
 
 public class Timer : MonoBehaviour
 {
     private float remainingTime;
     private bool timerIsRunning = false;
+    private Health _health;
     public TMP_Text OSTimer;
     public TMP_Text Description;
     [Header("Timings")]
@@ -40,7 +42,8 @@ public class Timer : MonoBehaviour
     void Start()
     {
         remainingTime = maxGameTime;
-        timerIsRunning = true;        
+        timerIsRunning = true;
+        _health = GetComponent<Health>();        
     }
 
     // Update is called once per frame
@@ -60,7 +63,8 @@ public class Timer : MonoBehaviour
                 //Debug.Log("Time ran out");
                 timerIsRunning = false;
                 remainingTime = 0;
-                SceneManager.LoadScene("LoseScene");
+                _health.TakeDamage(10.0f, gameObject);
+                //SceneManager.LoadScene("LoseScene");
             }  
         }
     }
