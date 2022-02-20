@@ -22,6 +22,12 @@ namespace Game.Scripts
         [SerializeField] private float _doubleJumpMultiplier = 0.5f;
         [SerializeField] private GameObject _cameraRig;
         
+        [Header("Audio")] [Tooltip("Sound played when player walk")]
+        public AudioClip WalkSfx;
+        
+        [Header("Audio")] [Tooltip("Sound played when player jump")]
+        public AudioClip JumpSfx;
+        
         [FormerlySerializedAs("FallDamageAtMaxSpeed")]
         [Tooltip("Damage received when falling at the maximum speed")] 
         [SerializeField]
@@ -125,6 +131,7 @@ namespace Game.Scripts
         }
 
         private bool _screaming;
+        private bool _playWalkingSound;
 
         private void MovementPlatformer()
         {
@@ -156,6 +163,16 @@ namespace Game.Scripts
 
             _controller.Move(velocity * Time.deltaTime);
             _currentSpeed = new Vector2(_controller.velocity.x, _controller.velocity.z).magnitude;
+
+            if (_currentSpeed > 0)
+            {
+                // I think I'm moving...
+                if (!_playWalkingSound)
+                {
+                    AudioSource.PlayOneShot(WalkSfx);
+                    _playWalkingSound = true;
+                }
+            }
 
             if (_controller.isGrounded)
             {
