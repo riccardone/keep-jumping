@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 135415070846369410}
   m_Layer: 2
   m_Name: Ring
-  m_TagString: Untagged
+  m_TagString: ring
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28,7 +28,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1015780934767744}
-  m_LocalRotation: {x: 0.05303636, y: -0.3926545, z: 0.12290039, w: 0.909893}
+  m_LocalRotation: {x: 0.053038053, y: -0.39265734, z: 0.122903585, w: 0.9098912}
   m_LocalPosition: {x: 0.000000020906658, y: 0.0000000057527405, z: 0.000000009357361}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []

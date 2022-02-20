@@ -422,6 +422,10 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1676547286635168083, guid: eb4b1a141bf964846a7c6881785c8442, type: 3}
+      propertyPath: FallScreamSfx
+      value: 
+      objectReference: {fileID: 8300000, guid: 75c63010101dc01459b6df7caf99ba33, type: 3}
+    - target: {fileID: 1676547286635168083, guid: eb4b1a141bf964846a7c6881785c8442, type: 3}
       propertyPath: _rotationSpeed
       value: 1
       objectReference: {fileID: 0}
@@ -539,10 +543,6 @@ PrefabInstance:
     - target: {fileID: 4122938131327598, guid: 59db2e2c8e01e35498c17dfb1d21b1cb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -20.388
-      objectReference: {fileID: 0}
-    - target: {fileID: 114073182108852144, guid: 59db2e2c8e01e35498c17dfb1d21b1cb, type: 3}
-      propertyPath: rotationSpeed
-      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 59db2e2c8e01e35498c17dfb1d21b1cb, type: 3}
@@ -686,6 +686,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 564992943067128835, guid: fa80554c98ce3084baccebf2d9c23eb3, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 564992943067128835, guid: fa80554c98ce3084baccebf2d9c23eb3, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 564992943067128835, guid: fa80554c98ce3084baccebf2d9c23eb3, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 564992943067128835, guid: fa80554c98ce3084baccebf2d9c23eb3, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1576139182459386862, guid: fa80554c98ce3084baccebf2d9c23eb3, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -746,6 +762,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5300006238482689403, guid: fa80554c98ce3084baccebf2d9c23eb3, type: 3}
+      propertyPath: _loseSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 7dc48ac47b618424f8d032a339525809, type: 3}
+    - target: {fileID: 5300006238482689403, guid: fa80554c98ce3084baccebf2d9c23eb3, type: 3}
+      propertyPath: _victorySound
+      value: 
+      objectReference: {fileID: 8300000, guid: eec3bf121b316d64ca1c8aac7573a2f4, type: 3}
     - target: {fileID: 5300006238482689403, guid: fa80554c98ce3084baccebf2d9c23eb3, type: 3}
       propertyPath: EndGameFadeCanvasGroup
       value: 

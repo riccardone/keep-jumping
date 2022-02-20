@@ -284,6 +284,12 @@ MonoBehaviour:
   _jumpSpeed: 3.5
   _doubleJumpMultiplier: 0.5
   _cameraRig: {fileID: 7304758940221041152}
+  CollectRingSfx: {fileID: 8300000, guid: c2db5173a8d23b049bdaf6dac5dce8e7, type: 3}
+  WalkSfx: {fileID: 8300000, guid: f88aa264010cdf843895738101d31ae0, type: 3}
+  JumpSfx: {fileID: 8300000, guid: 979b3ca6eb5087d438feb38f5ba264ab, type: 3}
+  _fallDamage: 10
+  AudioSource: {fileID: 2408849572369729435}
+  FallScreamSfx: {fileID: 0}
   jumpHeight: 2
   turnSmoothTime: 0.2
   speedSmoothTime: 0.1

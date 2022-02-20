@@ -5,28 +5,34 @@ namespace Game.Scripts.Managers
 {
     public class GameFlowManager : MonoBehaviour
     {
-        [Header("Parameters")] [Tooltip("Duration of the fade-to-black at the end of the game")]
+        [Tooltip("Duration of the fade-to-black at the end of the game")]
         public float EndSceneLoadDelay = 3f;
 
         [Tooltip("The canvas group of the fade-to-black screen")]
         public CanvasGroup EndGameFadeCanvasGroup;
 
-        [Header("Win")] [Tooltip("This string has to be the name of the scene you want to load when winning")]
+        [Tooltip("This string has to be the name of the scene you want to load when winning")]
         public string WinSceneName = "WinScene";
 
         [Tooltip("Duration of delay before the fade-to-black, if winning")]
-        public float DelayBeforeFadeToBlack = 4f;
+        public float DelayBeforeFadeToBlack = 2f;
+        
+        [Tooltip("Duration of delay before the fade-to-black, if winning")]
+        public float DelayBeforeFadeToBlackIfLoosing = 4f;
 
-        [Tooltip("Win game message")]
-        public string WinGameMessage;
         [Tooltip("Duration of delay before the win message")]
         public float DelayBeforeWinMessage = 2f;
 
-        [Tooltip("Sound played on win")] public AudioClip VictorySound;
+        [Tooltip("Sound played on win")]
+        [SerializeField]
+        private AudioClip _victorySound;
+        
+        // [Tooltip("Sound played on lose")]
+        // [SerializeField]
+        // private AudioClip _loseSound;
 
         [Header("Lose")] [Tooltip("This string has to be the name of the scene you want to load when losing")]
         public string LoseSceneName = "LoseScene";
-
 
         public bool GameIsEnding { get; private set; }
 
@@ -37,6 +43,12 @@ namespace Game.Scripts.Managers
         {
             EventManager.AddListener<AllObjectivesCompletedEvent>(OnAllObjectivesCompleted);
             EventManager.AddListener<PlayerDeathEvent>(OnPlayerDeath);
+        }
+
+        private void OnGameOver(GameOverEvent obj)
+        {
+            var ring = GameObject.FindWithTag("ring");
+            ring.gameObject.SetActive(true);
         }
 
         void Start()
@@ -81,26 +93,18 @@ namespace Game.Scripts.Managers
 
                 // play a sound on win
                 var audioSource = gameObject.AddComponent<AudioSource>();
-                audioSource.clip = VictorySound;
+                audioSource.clip = _victorySound;
                 audioSource.playOnAwake = false;
-                audioSource.outputAudioMixerGroup = AudioUtility.GetAudioGroup(AudioUtility.AudioGroups.HUDVictory);
-                audioSource.PlayScheduled(AudioSettings.dspTime + DelayBeforeWinMessage);
-
-                // create a game message
-                //var message = Instantiate(WinGameMessagePrefab).GetComponent<DisplayMessage>();
-                //if (message)
-                //{
-                //    message.delayBeforeShowing = delayBeforeWinMessage;
-                //    message.GetComponent<Transform>().SetAsLastSibling();
-                //}
-
-                DisplayMessageEvent displayMessage = Events.DisplayMessageEvent;
-                displayMessage.Message = WinGameMessage;
-                displayMessage.DelayBeforeDisplay = DelayBeforeWinMessage;
-                EventManager.Broadcast(displayMessage);
+                audioSource.Play();
             }
             else
             {
+                // play a sound on loose
+                // var audioSource = gameObject.AddComponent<AudioSource>();
+                // audioSource.clip = _loseSound;
+                // audioSource.playOnAwake = false;
+                // audioSource.Play();
+                
                 m_SceneToLoad = LoseSceneName;
                 m_TimeLoadEndGameScene = Time.time + EndSceneLoadDelay;
             }
