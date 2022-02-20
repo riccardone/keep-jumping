@@ -191,10 +191,7 @@ namespace Game.Scripts
         private void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.tag.Equals("ring"))
-            {
-                other.gameObject.SetActive(false);
                 EventManager.Broadcast(Events.AllObjectivesCompletedEvent);
-            }
         }
     }
 }
