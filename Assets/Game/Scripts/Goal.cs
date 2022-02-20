@@ -3,37 +3,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Goal : MonoBehaviour
+namespace Game.Scripts.Managers
 {
-    //On Collision with player
-    void OnTriggerEnter(Collider other)
+    public class Goal : MonoBehaviour
     {
-        if (other.gameObject.layer == 1) //Double check player layer
+        //On Collision with player
+        void OnTriggerEnter(Collider other)
         {
-            switch((SceneManager.GetActiveScene()).name)
+            EventManager.Broadcast(new GameOverEvent()); //On trigger of the goal, Broadcast gameover event
+            /*
+            if (other.gameObject.layer == 1) //Double check player layer
             {
-                case "":
-                    SceneManager.LoadScene("");
-                    break;
-                case "":
-                    SceneManager.LoadScene("");
-                    break;
-                case "":
-                    SceneManager.LoadScene("");
-                    break;
-                //Question: Do I need to break?
+                switch((SceneManager.GetActiveScene()).name)
+                {
+                    case "":
+                        SceneManager.LoadScene("");
+                        break;
+                    case "":
+                        SceneManager.LoadScene("");
+                        break;
+                    case "":
+                        SceneManager.LoadScene("");
+                        break;
+                    //Question: Do I need to break?
+                }
             }
+            */
         }
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+        // Start is called before the first frame update
+        void Start()
+        {
+            
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        // Update is called once per frame
+        void Update()
+        {
+            
+        }
     }
 }
