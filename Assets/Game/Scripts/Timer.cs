@@ -57,7 +57,7 @@ public class Timer : MonoBehaviour
             //Do whatever is needed when time is out
             else
             {
-                Debug.Log("Time ran out");
+                //Debug.Log("Time ran out");
                 timerIsRunning = false;
                 remainingTime = 0;
                 SceneManager.LoadScene("LoseScene");
