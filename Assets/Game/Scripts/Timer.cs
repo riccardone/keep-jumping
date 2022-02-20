@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 using Game.Scripts;
+using Game.Scripts.Managers;
 
 public class Timer : MonoBehaviour
 {
@@ -37,13 +38,18 @@ public class Timer : MonoBehaviour
         
     }
 
+    void OnAllObjectivesCompleted(AllObjectivesCompletedEvent evt)
+    {
+        timerIsRunning = false;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
         remainingTime = maxGameTime;
         timerIsRunning = true;
-        _health = GetComponent<Health>();        
+        _health = GetComponent<Health>();
+        EventManager.AddListener<AllObjectivesCompletedEvent>(OnAllObjectivesCompleted);        
     }
 
     // Update is called once per frame
