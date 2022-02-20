@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Unity.FPS.Game
+namespace Game.Scripts
 {
     public static class DebugUtility
     {
