@@ -60,7 +60,7 @@ public class Timer : MonoBehaviour
                 Debug.Log("Time ran out");
                 timerIsRunning = false;
                 remainingTime = 0;
-                SceneManager.LoadScene("Time Out");
+                SceneManager.LoadScene("LoseScene");
             }  
         }
     }
