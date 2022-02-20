@@ -20,7 +20,7 @@ namespace Game.Scripts
 
     public class ObjectiveUpdateEvent : GameEvent
     {
-        public Objective Objective;
+        //public Objective Objective;
         public string DescriptionText;
         public string CounterText;
         public bool IsComplete;
