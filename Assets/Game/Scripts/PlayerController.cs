@@ -10,11 +10,12 @@ namespace Game.Scripts
         Platformer,
         Strafe
     }
-    
+
     public class PlayerController : MonoBehaviour
     {
-        [Header("Player settings")]
-        [SerializeField] private MovementMode _movementMode = MovementMode.Strafe;
+        [Header("Player settings")] [SerializeField]
+        private MovementMode _movementMode = MovementMode.Strafe;
+
         [SerializeField] private float _walkSpeed = 3f;
         [SerializeField] private float _runningSpeed = 6f;
         [SerializeField] private float _gravity = 9.81f;
@@ -22,9 +23,10 @@ namespace Game.Scripts
         [SerializeField] private float _jumpSpeed = 3.5f;
         [SerializeField] private float _doubleJumpMultiplier = 0.5f;
         [SerializeField] private GameObject _cameraRig;
-        [Tooltip("Damage received when falling at the maximum speed")] 
-        [SerializeField]
+
+        [Tooltip("Damage received when falling at the maximum speed")] [SerializeField]
         private float _fallDamage = 10.0f;
+
         public float jumpHeight = 1;
         public float turnSmoothTime = 0.2f;
         public bool IsDead { get; private set; }
@@ -38,15 +40,13 @@ namespace Game.Scripts
         private float _velocityY;
         private Health _health;
 
-        [Header("Audio")] 
-        [Tooltip("Sound played when player walk")]
+        [Header("Audio")] [Tooltip("Sound played when player walk")]
         public AudioClip WalkSfx;
 
         [Tooltip("Sound played when player jump")]
         public AudioClip JumpSfx;
-        
-        [Tooltip("Sound played when falling to death")]
-        [SerializeField]
+
+        [Tooltip("Sound played when falling to death")] [SerializeField]
         public AudioClip FallScreamSfx;
 
         [Tooltip("Audio source for footsteps, jump, etc...")]
@@ -56,10 +56,10 @@ namespace Game.Scripts
         {
             _controller = GetComponent<CharacterController>();
             _health = GetComponent<Health>();
-            
+
             var ring = GameObject.FindWithTag("ring");
             ring.gameObject.SetActive(true);
-            
+
             _health.OnDie += OnDie;
         }
 
@@ -75,7 +75,7 @@ namespace Game.Scripts
             {
                 MovementStafe();
             }
-            
+
             if (_movementMode == MovementMode.Platformer)
             {
                 MovementPlatformer();
@@ -122,6 +122,7 @@ namespace Game.Scripts
 
         private bool _playWalkingSound;
         private bool _isPlayDeathSfx;
+        private int _counter = 0;
 
         private void MovementPlatformer()
         {
@@ -138,7 +139,7 @@ namespace Game.Scripts
             }
 
             // if the player is falling play the death sound
-            if (Math.Abs(_velocityY - (-10.0f)) < 1)
+            if (Math.Abs(_velocityY - (-15.0f)) < 1)
             {
                 if (!_isPlayDeathSfx)
                 {
@@ -151,7 +152,7 @@ namespace Game.Scripts
             }
 
             // end of the game
-            if (Math.Abs(_velocityY - (-30.0f)) < 1)
+            if (Math.Abs(_velocityY - (-35.0f)) < 1)
                 _health.TakeDamage(_fallDamage, gameObject);
 
             float targetSpeed = ((running) ? _runningSpeed : _walkSpeed) * inputDir.magnitude;
@@ -166,10 +167,17 @@ namespace Game.Scripts
             if (_currentSpeed > 0)
             {
                 // I think I'm moving...
-                if (!_playWalkingSound)
+                if (_counter < 120)
                 {
-                    AudioSource.PlayOneShot(WalkSfx);
-                    _playWalkingSound = true;
+                    _counter++;
+                }
+                else
+                {
+                    _counter = 0;
+                    var audioSource = gameObject.AddComponent<AudioSource>();
+                    audioSource.clip = WalkSfx;
+                    audioSource.playOnAwake = false;
+                    audioSource.Play();
                 }
             }
 
@@ -184,6 +192,11 @@ namespace Game.Scripts
                 {
                     float jumpVelocity = Mathf.Sqrt(-2 * _gravityPlatformer * jumpHeight);
                     _velocityY = jumpVelocity;
+
+                    var audioSource = gameObject.AddComponent<AudioSource>();
+                    audioSource.clip = JumpSfx;
+                    audioSource.playOnAwake = false;
+                    audioSource.Play();
                 }
             }
         }
@@ -191,10 +204,7 @@ namespace Game.Scripts
         private void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.tag.Equals("ring"))
-            {
-                other.gameObject.SetActive(false);
                 EventManager.Broadcast(Events.AllObjectivesCompletedEvent);
-            }
         }
     }
 }
